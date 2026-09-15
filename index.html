@@ -243,10 +243,16 @@
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
             text-align: center; color: var(--white);
         }
+        .stat-item {
+            min-width: 0;
+            overflow: hidden;
+        }
         .stat-item .stat-number {
             font-family: 'Playfair Display', serif;
-            font-size: 3rem; font-weight: 700; color: var(--accent);
+            font-size: 2.8rem; font-weight: 700; color: var(--accent);
             display: block;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
         }
         .stat-item .stat-label {
             font-size: 0.8rem; letter-spacing: 2px;
@@ -701,19 +707,26 @@
             .hero-btns { flex-direction: column; width: 100%; }
             .hero-btns .btn { width: 100%; justify-content: center; }
             
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+            .stat-item .stat-number { font-size: 2.1rem; }
+            .stat-item .stat-label { font-size: 0.72rem; letter-spacing: 1px; }
+
             .about-images { display: flex; flex-direction: column; }
             .about-images img:nth-child(2), .about-images img:nth-child(3) { display: none; }
             .floating-badge { display: none; }
             
             .savour-filter-bar { 
-                border-radius: 12px; gap: 6px; padding: 10px; 
-                flex-wrap: nowrap; overflow-x: auto; 
-                justify-content: flex-start;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none; /* Firefox */
+                border-radius: 16px; gap: 8px; padding: 10px; 
+                flex-wrap: wrap; justify-content: center;
+                max-width: 100%;
             }
-            .savour-filter-bar::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
-            .savour-tab-btn { font-size: 0.85rem; padding: 0.6rem 1.2rem; flex: 0 0 auto; width: auto; }
+            .savour-tab-btn { 
+                font-size: 0.8rem; 
+                padding: 0.5rem 0.95rem; 
+                border-radius: 50px;
+                flex: 0 0 auto; 
+                width: auto; 
+            }
             
             .savour-cards-grid { grid-template-columns: 1fr; }
             .testimonials-grid { grid-template-columns: 1fr; }
@@ -777,20 +790,20 @@
     <div class="stats">
         <div class="stats-grid">
             <div class="stat-item fade-in">
-                <span class="stat-number" data-target="7">0</span>
-                <span class="stat-label">Jahre Erfahrung</span>
+                <span class="stat-number">2018</span>
+                <span class="stat-label">In Herten seit</span>
             </div>
             <div class="stat-item fade-in">
-                <span class="stat-number" data-target="15000">0</span>
-                <span class="stat-label">Zufriedene Gäste</span>
+                <span class="stat-number">4.9 ★</span>
+                <span class="stat-label">Google Bewertung</span>
             </div>
             <div class="stat-item fade-in">
-                <span class="stat-number" data-target="40">0</span>
+                <span class="stat-number">40+</span>
                 <span class="stat-label">Spezialitäten</span>
             </div>
             <div class="stat-item fade-in">
                 <span class="stat-number">100%</span>
-                <span class="stat-label">Frische Zutaten</span>
+                <span class="stat-label">Frisch &amp; Hausgemacht</span>
             </div>
         </div>
     </div>
@@ -896,7 +909,7 @@
             </div>
 
             <!-- 3. FRÜHSTÜCK: Pancakes -->
-            <div class="savour-food-card fade-in" data-cat="fruehstueck" style="display: none;">
+            <div class="savour-food-card fade-in" data-cat="fruehstueck empfehlungen">
                 <div class="savour-card-img-wrap">
                     <span class="savour-badge-pill">🍓 Süßer Genuss</span>
                     <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=700&amp;q=80" alt="Fluffige Beeren-Pancakes">
@@ -1019,7 +1032,7 @@
             <div class="savour-food-card fade-in" data-cat="kuchen empfehlungen">
                 <div class="savour-card-img-wrap">
                     <span class="savour-badge-pill">⭐ Bestseller</span>
-                    <img src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=700&amp;q=80" alt="Carmen's Käsekuchen">
+                    <img src="https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=700&amp;q=80" alt="Carmen's Käsekuchen">
                 </div>
                 <div class="savour-card-body">
                     <div class="savour-card-header">
@@ -1036,7 +1049,7 @@
             </div>
 
             <!-- 10. KUCHEN: Belgische Schokoladentorte -->
-            <div class="savour-food-card fade-in" data-cat="kuchen" style="display: none;">
+            <div class="savour-food-card fade-in" data-cat="kuchen empfehlungen">
                 <div class="savour-card-img-wrap">
                     <span class="savour-badge-pill">🍫 Edel-Kakao</span>
                     <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=700&amp;q=80" alt="Belgische Schokoladentorte">
@@ -1310,26 +1323,6 @@
 
         document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach(el => observer.observe(el));
 
-        // Counter animation
-        const counterObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const el = entry.target;
-                    const target = parseInt(el.dataset.target);
-                    if (!target) return;
-                    let current = 0;
-                    const step = target / 60;
-                    const timer = setInterval(() => {
-                        current += step;
-                        if (current >= target) { current = target; clearInterval(timer); }
-                        el.textContent = Math.floor(current).toLocaleString('de-DE') + (target > 100 ? '+' : '');
-                    }, 25);
-                    counterObserver.unobserve(el);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
 
         // Savour Menu Filter
         function filterSavourMenu(category, button) {
