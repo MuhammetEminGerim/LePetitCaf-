@@ -705,8 +705,15 @@
             .about-images img:nth-child(2), .about-images img:nth-child(3) { display: none; }
             .floating-badge { display: none; }
             
-            .savour-filter-bar { border-radius: 12px; gap: 6px; padding: 10px; }
-            .savour-tab-btn { font-size: 0.8rem; padding: 0.6rem 1rem; width: 100%; }
+            .savour-filter-bar { 
+                border-radius: 12px; gap: 6px; padding: 10px; 
+                flex-wrap: nowrap; overflow-x: auto; 
+                justify-content: flex-start;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; /* Firefox */
+            }
+            .savour-filter-bar::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+            .savour-tab-btn { font-size: 0.85rem; padding: 0.6rem 1.2rem; flex: 0 0 auto; width: auto; }
             
             .savour-cards-grid { grid-template-columns: 1fr; }
             .testimonials-grid { grid-template-columns: 1fr; }
@@ -721,9 +728,10 @@
         /* Small Mobile */
         @media (max-width: 480px) {
             .hero h1 { font-size: 2.4rem; }
-            .stats-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
             .gallery-grid { grid-template-columns: 1fr; }
-            .gallery-item:first-child { grid-column: 1; }
+            .gallery-item:first-child { grid-column: 1; height: 200px; }
+            .gallery-item { height: 200px; }
             .cta-banner h2 { font-size: 2rem; }
         }
     </style>
