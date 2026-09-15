@@ -4,549 +4,795 @@
     <meta charset="UTF-8">
     <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Speisekarte | Le Petit Café Herten</title>
+    <title>Digitale Speisekarte | Le Petit Café Herten</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #2c1810;
+            --primary-light: #4a2c20;
             --accent: #c8956c;
             --accent-dark: #a87650;
-            --accent-soft: #f4ede6;
+            --accent-soft: #f5ebe1;
             --cream: #fbf8f5;
             --white: #ffffff;
-            --text-main: #2d2621;
+            --text-main: #2b2521;
             --text-muted: #736b63;
             --border: rgba(200, 149, 108, 0.18);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html { scroll-behavior: smooth; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--cream);
             color: var(--text-main);
-            padding-bottom: 80px;
             overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 70px;
         }
 
-        /* ===== COMPACT LUXURY HEADER ===== */
+        /* ===== HEADER ===== */
         header {
             background: var(--white);
             border-bottom: 1px solid var(--border);
-            padding: 1.2rem 1.2rem 0.8rem;
+            padding: 1.1rem 1rem 0.9rem;
             text-align: center;
-            position: relative;
+            position: sticky;
+            top: 0;
+            z-index: 40;
         }
-        .header-brand {
+        .header-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             color: var(--primary);
             line-height: 1;
             margin-bottom: 0.2rem;
+            text-decoration: none;
+            display: inline-block;
         }
         .header-sub {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: var(--accent-dark);
             font-weight: 500;
         }
 
-        /* ===== STICKY CATEGORY NAV ===== */
-        .category-nav-wrapper {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: rgba(251, 248, 245, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            padding: 0.7rem 0;
-        }
-        .category-nav {
-            display: flex;
-            gap: 0.5rem;
-            overflow-x: auto;
-            padding: 0 1rem;
-            scrollbar-width: none;
-        }
-        .category-nav::-webkit-scrollbar { display: none; }
-        
-        .cat-btn {
-            background: var(--white);
-            color: var(--text-muted);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 0.55rem 1.1rem;
-            font-size: 0.82rem;
-            font-weight: 500;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .cat-btn.active {
-            background: var(--primary);
-            color: var(--white);
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(44, 24, 16, 0.2);
-        }
-
         /* ===== CONTAINER ===== */
-        .menu-container {
-            max-width: 650px;
+        .app-container {
+            max-width: 600px;
             margin: 0 auto;
             padding: 1.2rem 1rem;
         }
 
-        /* ===== SECTION TITLES ===== */
-        .section-block {
-            margin-bottom: 2.2rem;
-            scroll-margin-top: 75px;
+        /* ===== VIEW 1: CATEGORIES GRID ===== */
+        #categoriesView {
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        .section-heading {
+        .welcome-badge {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1.5px solid var(--border);
-        }
-        .section-heading h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.35rem;
-            color: var(--primary);
-            font-weight: 600;
-        }
-        .section-heading span {
-            font-size: 0.72rem;
-            color: var(--accent-dark);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 500;
-        }
-
-        /* ===== MENU ITEM CARDS (Boutique Dine-in Style) ===== */
-        .items-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.9rem;
-        }
-        .item-card {
             background: var(--white);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 1rem;
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 1.4rem;
+            box-shadow: 0 2px 10px rgba(44, 24, 16, 0.03);
+        }
+        .welcome-badge-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            color: var(--primary);
+            margin-bottom: 0.15rem;
+        }
+        .welcome-badge-text p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .welcome-badge-icon {
+            font-size: 1.6rem;
+        }
+
+        .section-title-hub {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-dark);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            padding-left: 0.2rem;
+        }
+
+        /* Featured Banner Card (Empfehlungen) */
+        .featured-cat-card {
+            position: relative;
+            height: 140px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 18px rgba(44, 24, 16, 0.12);
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .featured-cat-card:active {
+            transform: scale(0.98);
+        }
+        .featured-cat-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .featured-cat-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(44, 24, 16, 0.2) 0%, rgba(44, 24, 16, 0.85) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.1rem 1.2rem;
+            color: var(--white);
+        }
+        .featured-cat-overlay .pill-tag {
+            align-self: flex-start;
+            background: var(--accent);
+            color: var(--white);
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            margin-bottom: 0.35rem;
+        }
+        .featured-cat-overlay h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+
+        /* 2-Column Grid for other categories */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.9rem;
+        }
+        .cat-card {
+            background: var(--white);
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 14px rgba(44, 24, 16, 0.05);
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .cat-card:active {
+            transform: scale(0.97);
+        }
+        .cat-card-img {
+            height: 115px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            background: #ede6df;
+        }
+        .cat-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .cat-card-content {
+            padding: 0.85rem 0.9rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+        }
+        .cat-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.2rem;
+            line-height: 1.25;
+        }
+        .cat-card-meta {
+            font-size: 0.72rem;
+            color: var(--accent-dark);
+            font-weight: 500;
+        }
+
+        /* ===== VIEW 2: PRODUCTS VIEW ===== */
+        #productsView {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        #productsView.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Top Nav inside products view */
+        .category-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+            gap: 0.5rem;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(44, 24, 16, 0.04);
+            transition: background 0.2s ease;
+        }
+        .back-btn:active {
+            background: var(--accent-soft);
+        }
+
+        .active-cat-info {
+            text-align: right;
+        }
+        .active-cat-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .active-cat-sub {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Horizontal quick tabs */
+        .quick-switch-tabs {
+            display: flex;
+            gap: 0.45rem;
+            overflow-x: auto;
+            padding-bottom: 0.8rem;
+            margin-bottom: 1rem;
+            scrollbar-width: none;
+        }
+        .quick-switch-tabs::-webkit-scrollbar { display: none; }
+        .quick-pill {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.4rem 0.85rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .quick-pill.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* Products List */
+        .products-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+        .product-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 0.95rem;
             display: flex;
             justify-content: space-between;
-            gap: 1rem;
-            box-shadow: 0 2px 8px rgba(44, 24, 16, 0.03);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            gap: 0.9rem;
+            box-shadow: 0 2px 10px rgba(44, 24, 16, 0.03);
         }
-        .item-card:active {
-            transform: scale(0.99);
-        }
-        .item-info {
+        .product-details {
             flex: 1;
             display: flex;
             flex-direction: column;
         }
-        .item-title {
+        .product-title {
             font-family: 'Playfair Display', serif;
             font-size: 1.05rem;
             font-weight: 600;
             color: var(--primary);
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.25rem;
             display: flex;
             align-items: center;
             gap: 6px;
             flex-wrap: wrap;
         }
-        .item-badge {
+        .badge-tag {
             background: var(--accent-soft);
             color: var(--accent-dark);
             font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 600;
-            padding: 0.15rem 0.5rem;
-            border-radius: 12px;
+            padding: 0.15rem 0.45rem;
+            border-radius: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        .item-desc {
-            font-size: 0.8rem;
+        .product-desc {
+            font-size: 0.78rem;
             color: var(--text-muted);
             line-height: 1.45;
-            margin-bottom: 0.7rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            margin-bottom: 0.65rem;
         }
-        .item-bottom {
+        .product-meta {
             margin-top: auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
-        .item-price {
+        .product-price {
             font-size: 1.05rem;
             font-weight: 600;
             color: var(--primary);
         }
-        .item-tag {
-            font-size: 0.72rem;
-            color: #8c7e73;
+        .product-note {
+            font-size: 0.7rem;
+            color: var(--accent-dark);
+            font-weight: 500;
         }
 
-        .item-photo {
-            width: 96px;
-            height: 96px;
-            border-radius: 12px;
+        .product-image {
+            width: 90px;
+            height: 90px;
+            border-radius: 14px;
             overflow: hidden;
             flex-shrink: 0;
-            background: #f0ebe4;
+            background: #ede6df;
         }
-        .item-photo img {
+        .product-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
         }
 
-        /* ===== BOTTOM ACTIONS ===== */
-        .bottom-nav {
+        /* ===== BOTTOM BAR ===== */
+        .footer-sticky {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background: var(--white);
             border-top: 1px solid var(--border);
-            padding: 0.8rem 1.2rem;
+            padding: 0.75rem 1.2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            z-index: 90;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.04);
+            z-index: 40;
+            box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.04);
         }
-        .bottom-nav span {
+        .footer-sticky span {
             font-size: 0.75rem;
             color: var(--text-muted);
         }
-        .back-link {
+        .website-link {
             background: var(--accent-soft);
             color: var(--accent-dark);
             text-decoration: none;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            padding: 0.5rem 1rem;
+            padding: 0.45rem 0.9rem;
             border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
         }
     </style>
 </head>
 <body>
 
-    <!-- COMPACT HEADER -->
+    <!-- HEADER -->
     <header>
-        <div class="header-brand">Le Petit Café</div>
-        <div class="header-sub">Tisch-Speisekarte • Marktplatz 7</div>
+        <a href="#" onclick="showCategories(); return false;" class="header-logo">Le Petit Café</a>
+        <div class="header-sub">Digitale Speisekarte • Marktplatz 7</div>
     </header>
 
-    <!-- STICKY CATEGORIES -->
-    <div class="category-nav-wrapper">
-        <div class="category-nav" id="categoryNav">
-            <button class="cat-btn active" onclick="scrollToSection('empfehlungen', this)">⭐ Empfehlungen</button>
-            <button class="cat-btn" onclick="scrollToSection('fruehstueck', this)">🌅 Frühstück</button>
-            <button class="cat-btn" onclick="scrollToSection('kaffee', this)">☕ Kaffee</button>
-            <button class="cat-btn" onclick="scrollToSection('kuchen', this)">🍰 Kuchen</button>
-            <button class="cat-btn" onclick="scrollToSection('bistro', this)">🥪 Bistro</button>
+    <div class="app-container">
+
+        <!-- ============================================== -->
+        <!-- VIEW 1: KATEGORİ KARTLARI (İLK AÇILAN EKRAN)   -->
+        <!-- ============================================== -->
+        <div id="categoriesView">
+            
+            <div class="welcome-badge">
+                <div class="welcome-badge-text">
+                    <h3>Willkommen am Tisch!</h3>
+                    <p>Wählen Sie eine Kategorie zum Stöbern</p>
+                </div>
+                <div class="welcome-badge-icon">☕</div>
+            </div>
+
+            <div class="section-title-hub">Unsere Karte</div>
+
+            <!-- 1. Bestseller / Empfehlungen (Büyük Görsel Kart) -->
+            <div class="featured-cat-card" onclick="openCategory('empfehlungen')">
+                <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=700&q=80" alt="Empfehlungen">
+                <div class="featured-cat-overlay">
+                    <span class="pill-tag">⭐ Beliebt</span>
+                    <h2>Empfehlungen &amp; Highlights</h2>
+                </div>
+            </div>
+
+            <!-- 2x2 Izgara Kategoriler -->
+            <div class="categories-grid">
+
+                <!-- FRÜHSTÜCK -->
+                <div class="cat-card" onclick="openCategory('fruehstueck')">
+                    <div class="cat-card-img">
+                        <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=400&q=80" alt="Frühstück">
+                    </div>
+                    <div class="cat-card-content">
+                        <div class="cat-card-title">Frühstück &amp; Brunch</div>
+                        <div class="cat-card-meta">4 Spezialitäten • Bis 13h</div>
+                    </div>
+                </div>
+
+                <!-- KAFFEE & BARISTA -->
+                <div class="cat-card" onclick="openCategory('kaffee')">
+                    <div class="cat-card-img">
+                        <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=400&q=80" alt="Kaffee">
+                    </div>
+                    <div class="cat-card-content">
+                        <div class="cat-card-title">Kaffee &amp; Barista</div>
+                        <div class="cat-card-meta">Arabica Bohnen • Heiß &amp; Iced</div>
+                    </div>
+                </div>
+
+                <!-- KUCHEN & TORTEN -->
+                <div class="cat-card" onclick="openCategory('kuchen')">
+                    <div class="cat-card-img">
+                        <img src="https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=400&q=80" alt="Kuchen">
+                    </div>
+                    <div class="cat-card-content">
+                        <div class="cat-card-title">Kuchen &amp; Torten</div>
+                        <div class="cat-card-meta">Hausgemacht nach Rezept</div>
+                    </div>
+                </div>
+
+                <!-- BISTRO & SNACKS -->
+                <div class="cat-card" onclick="openCategory('bistro')">
+                    <div class="cat-card-img">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80" alt="Bistro">
+                    </div>
+                    <div class="cat-card-content">
+                        <div class="cat-card-title">Bistro &amp; Herzhaftes</div>
+                        <div class="cat-card-meta">Flammkuchen, Quiche &amp; Toast</div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
-    </div>
 
-    <!-- MAIN MENU LIST -->
-    <div class="menu-container">
 
-        <!-- 1. EMPFEHLUNGEN -->
-        <section class="section-block" id="empfehlungen">
-            <div class="section-heading">
-                <h2>Empfehlungen des Hauses</h2>
-                <span>Highlights</span>
-            </div>
-            <div class="items-list">
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">
-                            Petit Deluxe Frühstück
-                            <span class="item-badge">Bestseller</span>
-                        </div>
-                        <p class="item-desc">Rührei mit Kräutern, Räucherlachs, Avocado, warmes Buttercroissant, Konfitüre & ein Glas Prosecco.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">14,90 €</span>
-                            <span class="item-tag">Frisch zubereitet</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=250&q=80" alt="Petit Deluxe">
-                    </div>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">
-                            Carmen's Käsekuchen
-                            <span class="item-badge">Hausgemacht</span>
-                        </div>
-                        <p class="item-desc">Nach geheimem Familienrezept: samtig-cremiger Käsekuchen auf knusprigem Mürbeteigboden.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">4,90 €</span>
-                            <span class="item-tag">Täglich frisch</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=250&q=80" alt="Käsekuchen">
-                    </div>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">
-                            Elsässer Flammkuchen
-                            <span class="item-badge">Heiß</span>
-                        </div>
-                        <p class="item-desc">Steinofen-Boden mit Sauerrahm, feinen Räucherspeckstreifen und frischen Frühlingszwiebeln.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">8,90 €</span>
-                            <span class="item-tag">Bistro Hit</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=250&q=80" alt="Flammkuchen">
-                    </div>
+        <!-- ============================================== -->
+        <!-- VIEW 2: SEÇİLEN KATEGORİNİN ÜRÜNLERİ (DETAY)  -->
+        <!-- ============================================== -->
+        <div id="productsView">
+            
+            <div class="category-header-bar">
+                <button class="back-btn" onclick="showCategories()">
+                    ← Alle Kategorien
+                </button>
+                <div class="active-cat-info">
+                    <div class="active-cat-name" id="currentCatTitle">Kategorie</div>
+                    <div class="active-cat-sub" id="currentCatSub">Frisch serviert</div>
                 </div>
             </div>
-        </section>
 
-        <!-- 2. FRÜHSTÜCK -->
-        <section class="section-block" id="fruehstueck">
-            <div class="section-heading">
-                <h2>Frühstück</h2>
-                <span>Bis 13:00 Uhr</span>
+            <!-- Hızlı Geçiş Butonları -->
+            <div class="quick-switch-tabs">
+                <button class="quick-pill" data-id="empfehlungen" onclick="openCategory('empfehlungen')">⭐ Highlights</button>
+                <button class="quick-pill" data-id="fruehstueck" onclick="openCategory('fruehstueck')">🌅 Frühstück</button>
+                <button class="quick-pill" data-id="kaffee" onclick="openCategory('kaffee')">☕ Kaffee</button>
+                <button class="quick-pill" data-id="kuchen" onclick="openCategory('kuchen')">🍰 Kuchen</button>
+                <button class="quick-pill" data-id="bistro" onclick="openCategory('bistro')">🥪 Bistro</button>
             </div>
-            <div class="items-list">
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">Großes Marktfrühstück</div>
-                        <p class="item-desc">Zwei ofenfrische Brötchen, Schinken- & Käseauswahl, Bio-Ei, Landbutter & frischer O-Saft.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">9,90 €</span>
-                            <span class="item-tag">Klassiker</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?w=250&q=80" alt="Marktfrühstück">
-                    </div>
-                </div>
 
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">Fluffige Beeren-Pancakes</div>
-                        <p class="item-desc">Drei goldbraune Buttermilch-Pancakes mit Waldbeeren, kanadischem Ahornsirup & Bourbon-Sahne.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">8,50 €</span>
-                            <span class="item-tag">Süßer Start</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=250&q=80" alt="Pancakes">
-                    </div>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">
-                            Avocado Sourdough Toast
-                            <span class="item-badge">Vegan</span>
-                        </div>
-                        <p class="item-desc">Geröstetes Natursauerteigbrot mit frischer Guacamole, Cherrytomaten, Gartenkresse & Sesam.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">9,20 €</span>
-                            <span class="item-tag">Pflanzlich</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=250&q=80" alt="Avocado Toast">
-                    </div>
-                </div>
+            <!-- ÜRÜN LİSTESİ -->
+            <div class="products-list" id="productsContainer">
+                <!-- Javascript dinamik olarak dolduracak -->
             </div>
-        </section>
 
-        <!-- 3. KAFFEE & BARISTA -->
-        <section class="section-block" id="kaffee">
-            <div class="section-heading">
-                <h2>Kaffee & Barista</h2>
-                <span>Frisch gemahlen</span>
-            </div>
-            <div class="items-list">
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">Signature Cappuccino</div>
-                        <p class="item-desc">Hochland-Espresso mit samtig-cremigem Mikroschaum und Latte Art. Auf Wunsch mit Hafermilch.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">3,50 €</span>
-                            <span class="item-tag">Arabica Bohnen</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1534778101976-62847782c213?w=250&q=80" alt="Cappuccino">
-                    </div>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">Karamell Macchiato</div>
-                        <p class="item-desc">Vanillierte warme Milch, intensiver Espresso-Shot und hausgemachter flüssiger Karamell-Drizzle.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">4,20 €</span>
-                            <span class="item-tag">Heiß oder Iced</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=250&q=80" alt="Macchiato">
-                    </div>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">Chai Latte Vanilla</div>
-                        <p class="item-desc">Aromatischer Bio-Gewürztee mit Zimt, Kardamom & Vanille, cremig aufgeschäumt.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">4,00 €</span>
-                            <span class="item-tag">Wärmend</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=250&q=80" alt="Chai Latte">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. KUCHEN & TORTEN -->
-        <section class="section-block" id="kuchen">
-            <div class="section-heading">
-                <h2>Kuchen & Gebäck</h2>
-                <span>Aus der Backstube</span>
-            </div>
-            <div class="items-list">
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">Belgische Schokoladentorte</div>
-                        <p class="item-desc">Zartschmelzende Schokotorte aus 70% belgischem Kakao, Himbeeren & Ganache.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">5,20 €</span>
-                            <span class="item-tag">Schoko-Traum</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=250&q=80" alt="Schokotorte">
-                    </div>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">Ofenfrischer Apfelstrudel</div>
-                        <p class="item-desc">Mit Boskop-Äpfeln, Zimt & Rosinen, serviert mit lauwarmer echter Bourbon-Vanillesoße.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">5,50 €</span>
-                            <span class="item-tag">Warm serviert</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?w=250&q=80" alt="Apfelstrudel">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. BISTRO & SNACKS -->
-        <section class="section-block" id="bistro">
-            <div class="section-heading">
-                <h2>Bistro-Küche</h2>
-                <span>Herzhaft & Frisch</span>
-            </div>
-            <div class="items-list">
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">Quiche Lorraine du Chef</div>
-                        <p class="item-desc">Pikanter Mürbeteig mit Gruyère, Lauch & magerem Speck, dazu kleiner Beilagensalat.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">7,90 €</span>
-                            <span class="item-tag">Inkl. Salat</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1621236378699-8597fee6a1ce?w=250&q=80" alt="Quiche">
-                    </div>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-info">
-                        <div class="item-title">Croque Monsieur de Paris</div>
-                        <p class="item-desc">Getoastetes Butterbrot mit Bechamelsauce, Kochschinken und überbackenem Emmentaler.</p>
-                        <div class="item-bottom">
-                            <span class="item-price">8,50 €</span>
-                            <span class="item-tag">Bistro Klassiker</span>
-                        </div>
-                    </div>
-                    <div class="item-photo">
-                        <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=250&q=80" alt="Croque Monsieur">
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
 
     </div>
 
-    <!-- BOTTOM BAR -->
-    <div class="bottom-nav">
-        <span>☕ Le Petit Café • Marktplatz 7</span>
-        <a href="index.html" class="back-link">Zur Café-Webseite →</a>
+    <!-- FOOTER STICKY -->
+    <div class="footer-sticky">
+        <span>☕ Fragen? Wenden Sie sich gern an unser Team!</span>
+        <a href="index.html" class="website-link">Hauptseite →</a>
     </div>
 
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        function scrollToSection(id, btn) {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            if (btn) btn.classList.add('active');
-            const target = document.getElementById(id);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const MENU_DATA = {
+            empfehlungen: {
+                title: "Empfehlungen",
+                sub: "Die beliebtesten Klassiker",
+                items: [
+                    {
+                        title: "Petit Deluxe Frühstück",
+                        desc: "Rührei mit Kräutern, Lachs, Avocado, Croissant, Konfitüre & ein Glas Prosecco.",
+                        price: "14,90 €",
+                        tag: "Bestseller",
+                        note: "Gourmet",
+                        img: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=250&q=80"
+                    },
+                    {
+                        title: "Signature Cappuccino",
+                        desc: "Hochland-Arabica Espresso mit samtig aufgeschäumter Barista-Milch (oder Hafermilch).",
+                        price: "3,50 €",
+                        tag: "Barista",
+                        note: "Latte Art",
+                        img: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=250&q=80"
+                    },
+                    {
+                        title: "Carmen's Käsekuchen",
+                        desc: "Nach geheimem Familienrezept gebacken: samtig-cremig auf feinem Mürbeteigboden.",
+                        price: "4,90 €",
+                        tag: "Hausgemacht",
+                        note: "Täglich frisch",
+                        img: "https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=250&q=80"
+                    },
+                    {
+                        title: "Belgische Schokoladentorte",
+                        desc: "Zartschmelzende Torte aus 70% belgischer Schokolade, frischen Himbeeren & Ganache.",
+                        price: "5,20 €",
+                        tag: "Edel-Kakao",
+                        note: "Sünde wert",
+                        img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=250&q=80"
+                    },
+                    {
+                        title: "Elsässer Flammkuchen",
+                        desc: "Hauchdünner Steinofenteig mit gewürztem Sauerrahm, Speckstreifen & Frühlingszwiebeln.",
+                        price: "8,90 €",
+                        tag: "Bestseller",
+                        note: "Ofenfrisch",
+                        img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=250&q=80"
+                    }
+                ]
+            },
+            fruehstueck: {
+                title: "Frühstück & Brunch",
+                sub: "Täglich frisch zubereitet bis 13:00 Uhr",
+                items: [
+                    {
+                        title: "Petit Deluxe Frühstück",
+                        desc: "Rührei mit Kräutern, Lachs, Avocado, Croissant, Konfitüre & ein Glas Prosecco.",
+                        price: "14,90 €",
+                        tag: "Bestseller",
+                        note: "Gourmet",
+                        img: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=250&q=80"
+                    },
+                    {
+                        title: "Großes Marktfrühstück",
+                        desc: "Zwei ofenfrische Handwerksbrötchen, Schinken- & Käseauswahl, Bio-Ei, Landbutter & frischer O-Saft.",
+                        price: "9,90 €",
+                        tag: "Klassiker",
+                        note: "Traditionell",
+                        img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=250&q=80"
+                    },
+                    {
+                        title: "Fluffige Beeren-Pancakes",
+                        desc: "Drei Buttermilch-Pancakes mit Waldbeeren, kanadischem Ahornsirup & echter Bourbon-Sahne.",
+                        price: "8,50 €",
+                        tag: "Süßer Genuss",
+                        note: "Hausgemacht",
+                        img: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=250&q=80"
+                    },
+                    {
+                        title: "Avocado Sourdough Toast",
+                        desc: "Geröstetes Sauerteigbrot mit Guacamole, Kirschtomaten, Gartenkresse, Sesam & Olivenöl.",
+                        price: "9,20 €",
+                        tag: "Vegan",
+                        note: "100% Pflanzlich",
+                        img: "https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=250&q=80"
+                    }
+                ]
+            },
+            kaffee: {
+                title: "Kaffee & Barista",
+                sub: "Feinste Hochland-Arabicabohnen",
+                items: [
+                    {
+                        title: "Signature Cappuccino",
+                        desc: "Doppelter Espresso-Shot mit cremigem Mikroschaum & Latte Art.",
+                        price: "3,50 €",
+                        tag: "Beliebt",
+                        note: "Hafermilch +0,40€",
+                        img: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=250&q=80"
+                    },
+                    {
+                        title: "Karamell Macchiato",
+                        desc: "Dreischichtig im Glas: Vanillemilch, Espresso und flüssiger Karamell-Drizzle.",
+                        price: "4,20 €",
+                        tag: "Süß",
+                        note: "Heiß oder Iced",
+                        img: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=250&q=80"
+                    },
+                    {
+                        title: "Chai Latte Vanilla",
+                        desc: "Indischer Bio-Schwarztee mit Kardamom, Zimt, Nelken und Bourbon-Vanille.",
+                        price: "4,00 €",
+                        tag: "Bio",
+                        note: "Cremig & Würzig",
+                        img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=250&q=80"
+                    },
+                    {
+                        title: "Frisch gepresster O-Saft",
+                        desc: "Direkt vor Ihren Augen gepresster Saft aus sonnengereiften Saftorangen.",
+                        price: "4,20 €",
+                        tag: "100% Frisch",
+                        note: "Vitamin-Power",
+                        img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=250&q=80"
+                    }
+                ]
+            },
+            kuchen: {
+                title: "Kuchen & Torten",
+                sub: "Täglich frisch aus unserer Backstube",
+                items: [
+                    {
+                        title: "Carmen's Käsekuchen",
+                        desc: "Hertener Legende: Samtig-cremige Quarkfüllung auf knusprigem Butterboden.",
+                        price: "4,90 €",
+                        tag: "Bestseller",
+                        note: "Familienrezept",
+                        img: "https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=250&q=80"
+                    },
+                    {
+                        title: "Belgische Schokoladentorte",
+                        desc: "Schwerelos zartschmelzende Torte aus 70% Kakao, Himbeeren & Ganache.",
+                        price: "5,20 €",
+                        tag: "Schoko",
+                        note: "Himmlisch",
+                        img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=250&q=80"
+                    },
+                    {
+                        title: "Ofenfrischer Apfelstrudel",
+                        desc: "Boskop-Äpfel mit Zimt und Rosinen im Ziehteig, serviert mit Vanillesoße.",
+                        price: "5,50 €",
+                        tag: "Warm",
+                        note: "Mit Vanillesoße",
+                        img: "https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?w=250&q=80"
+                    },
+                    {
+                        title: "Französisches Buttercroissant",
+                        desc: "Mit reiner französischer Butter mehrmals touriert – goldgelb & herrlich knusprig.",
+                        price: "2,80 €",
+                        tag: "Klassiker",
+                        note: "Ofenfrisch",
+                        img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=250&q=80"
+                    }
+                ]
+            },
+            bistro: {
+                title: "Bistro & Herzhaftes",
+                sub: "Warme Snacks & Bistro-Küche",
+                items: [
+                    {
+                        title: "Elsässer Flammkuchen",
+                        desc: "Krosser Teigboden mit Sauerrahm, Räucherspeck & frischem Lauch.",
+                        price: "8,90 €",
+                        tag: "Bestseller",
+                        note: "Auch vegetarisch",
+                        img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=250&q=80"
+                    },
+                    {
+                        title: "Quiche Lorraine du Chef",
+                        desc: "Mürbeteigkuchen mit Gruyère, Lauch & magerem Speck, dazu Beilagensalat.",
+                        price: "7,90 €",
+                        tag: "Inkl. Salat",
+                        note: "Warm serviert",
+                        img: "https://images.unsplash.com/photo-1621236378699-8597fee6a1ce?w=250&q=80"
+                    },
+                    {
+                        title: "Croque Monsieur de Paris",
+                        desc: "Getoastetes Butterbrot mit Bechamelsauce, edlem Schinken & geschmolzenem Emmentaler.",
+                        price: "8,50 €",
+                        tag: "Überbacken",
+                        note: "Heiß & Knusprig",
+                        img: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=250&q=80"
+                    },
+                    {
+                        title: "Caesar Salad Le Petit",
+                        desc: "Römersalat, gegrillte Hähnchenbruststreifen, Grana Padano & hausgemachtes Dressing.",
+                        price: "9,90 €",
+                        tag: "Knackig",
+                        note: "Inkl. Baguette",
+                        img: "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=250&q=80"
+                    }
+                ]
             }
+        };
+
+        function openCategory(catId) {
+            const data = MENU_DATA[catId];
+            if (!data) return;
+
+            document.getElementById('categoriesView').style.display = 'none';
+            const prodView = document.getElementById('productsView');
+            prodView.classList.add('active');
+
+            document.getElementById('currentCatTitle').textContent = data.title;
+            document.getElementById('currentCatSub').textContent = data.sub;
+
+            // Highlight quick pill
+            document.querySelectorAll('.quick-pill').forEach(pill => {
+                pill.classList.toggle('active', pill.dataset.id === catId);
+            });
+
+            // Render Products
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = data.items.map(item => `
+                <div class="product-card">
+                    <div class="product-details">
+                        <div class="product-title">
+                            ${item.title}
+                            ${item.tag ? `<span class="badge-tag">${item.tag}</span>` : ''}
+                        </div>
+                        <p class="product-desc">${item.desc}</p>
+                        <div class="product-meta">
+                            <span class="product-price">${item.price}</span>
+                            <span class="product-note">${item.note || ''}</span>
+                        </div>
+                    </div>
+                    <div class="product-image">
+                        <img src="${item.img}" alt="${item.title}" loading="lazy">
+                    </div>
+                </div>
+            `).join('');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.location.hash = catId;
         }
 
-        // Active tab on scroll
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('.section-block');
-            const scrollPos = window.scrollY + 120;
+        function showCategories() {
+            document.getElementById('productsView').classList.remove('active');
+            document.getElementById('categoriesView').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.pushState("", document.title, window.location.pathname + window.location.search);
+        }
 
-            sections.forEach(sec => {
-                const top = sec.offsetTop;
-                const height = sec.offsetHeight;
-                const id = sec.getAttribute('id');
-                if (scrollPos >= top && scrollPos < top + height) {
-                    document.querySelectorAll('.cat-btn').forEach(b => {
-                        b.classList.toggle('active', b.getAttribute('onclick').includes(id));
-                    });
-                }
-            });
+        // Handle native back button in mobile browsers
+        window.addEventListener('popstate', () => {
+            if (!window.location.hash) {
+                showCategories();
+            } else {
+                const cat = window.location.hash.replace('#', '');
+                if (MENU_DATA[cat]) openCategory(cat);
+            }
         });
+
+        // Open directly if hash present
+        if (window.location.hash) {
+            const initialCat = window.location.hash.replace('#', '');
+            if (MENU_DATA[initialCat]) openCategory(initialCat);
+        }
     </script>
 </body>
 </html>
